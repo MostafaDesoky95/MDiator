@@ -4,12 +4,11 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 			<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 			<Configuration>Release</Configuration>
-		<Version>0.0.10</Version>
+		<Version>0.0.11</Version>
 		<Authors>Mostafa Desoky</Authors>
 		<Company>OpenSource</Company>
 		<Description>Lightweight mediator for .NET - IMDiatorRequest, Events, CQRS.</Description>
 		<PackageTags>mediator cqrs dotnet pipeline events</PackageTags>
-		<PackageIconUrl>https://raw.githubusercontent.com/MostafaDesoky95/MDiator/cdd00a02c98bac6af73cde5584e0d64e1c7125d3/Icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 
@@ -17,7 +16,17 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RepositoryUrl>https://github.com/MostafaDesoky95/MDiator/</RepositoryUrl>
+    <PackageIcon>MDiator_Logo_Optimized.png</PackageIcon>
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Include="C:\Users\torpe\Downloads\MDiator_Logo_Optimized.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 	
   <ItemGroup>

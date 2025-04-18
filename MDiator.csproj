@@ -9,6 +9,7 @@
 		<Company>OpenSource</Company>
 		<Description>Lightweight mediator for .NET - IMDiatorRequest, Events, CQRS.</Description>
 		<PackageTags>mediator cqrs dotnet pipeline events</PackageTags>
+		<PackageIconUrl>https://raw.githubusercontent.com/MostafaDesoky95/MDiator/cdd00a02c98bac6af73cde5584e0d64e1c7125d3/Icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 

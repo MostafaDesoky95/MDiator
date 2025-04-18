@@ -69,3 +69,21 @@ public class NotifyTeamHandler : IMDiatorEventHandler<OrderCreatedEvent>
 ```
 await mediator.Publish(new OrderCreatedEvent { OrderId = 123 });
 ```
+
+
+## 🚀 Performance Benchmark
+
+MDiator is designed to be lean and fast — with no runtime reflection and minimal allocations.  
+Here’s a comparison with MediatR using [BenchmarkDotNet](https://benchmarkdotnet.org/):
+
+| Method       | Mean     | Error   | StdDev   | Gen0   | Gen1   | Allocated |
+|--------------|---------:|--------:|---------:|-------:|-------:|----------:|
+| **MDiator**  | 308.4 ns | 6.21 ns |  7.15 ns | 0.0563 |      - |     472 B |
+| MediatR      | 462.9 ns | 9.30 ns | 21.00 ns | 0.1779 | 0.0005 |    1488 B |
+
+> ✅ MDiator is ~33% faster and uses ~3× less memory compared to MediatR.
+
+Tested with:
+- .NET 9
+- Simple `Send()` request + one handler
+- Scoped resolution via Microsoft.Extensions.DependencyInjection

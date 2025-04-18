@@ -23,11 +23,10 @@ namespace MDiator
             var interfaceType = handlerType.GetInterfaces()
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMDiatorHandler<,>));
 
-            var method = interfaceType.GetMethod("Handle");
             var requestType = interfaceType.GetGenericArguments()[0];
             var responseType = interfaceType.GetGenericArguments()[1];
 
-            // Parameters: (object handler, object request)
+            // Parameters
             var handlerParam = Expression.Parameter(typeof(object), "handler");
             var requestParam = Expression.Parameter(typeof(object), "request");
 
@@ -35,13 +34,33 @@ namespace MDiator
             var castedHandler = Expression.Convert(handlerParam, handlerType);
             var castedRequest = Expression.Convert(requestParam, requestType);
 
-            // Call handler.Handle(request)
-            var call = Expression.Call(castedHandler, method, castedRequest);
+            // Method call: handler.Handle(request)
+            var call = Expression.Call(
+                castedHandler,
+                handlerType.GetMethod("Handle"),
+                castedRequest
+            );
 
-            // Convert Task<T> to Task<object>
-            var resultCast = Expression.Convert(call, typeof(object));
-            var lambda = Expression.Lambda<Func<object, object, Task<object>>>(resultCast, handlerParam, requestParam);
+            // Convert Task<T> → Task<object>
+            var funcType = typeof(Func<,,>).MakeGenericType(typeof(object), typeof(object), typeof(Task<object>));
+
+            var wrapper = typeof(HandlerInvokerCache)
+                .GetMethod(nameof(WrapTask), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+                .MakeGenericMethod(responseType);
+
+            var lambda = Expression.Lambda<Func<object, object, Task<object>>>(
+                Expression.Call(wrapper, call),
+                handlerParam,
+                requestParam
+            );
+
             return lambda.Compile();
+        }
+
+        // Helper to wrap Task<T> → Task<object> with await and unboxing
+        private static async Task<object> WrapTask<T>(Task<T> task)
+        {
+            return await task.ConfigureAwait(false);
         }
     }
 }

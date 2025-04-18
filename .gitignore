@@ -6,3 +6,4 @@ obj/
 .env
 *.nupkg
 .vs/
+MDiator.csproj.Backup.tmp

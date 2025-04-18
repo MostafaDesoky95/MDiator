@@ -2,8 +2,9 @@
 	
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>0.0.9</Version>
+			<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+			<Configuration>Release</Configuration>
+		<Version>0.0.10</Version>
 		<Authors>Mostafa Desoky</Authors>
 		<Company>OpenSource</Company>
 		<Description>Lightweight mediator for .NET - IMDiatorRequest, Events, CQRS.</Description>
@@ -19,10 +20,7 @@
 
 	
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="8.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
-	  <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
-
   </ItemGroup>
 
 </Project>

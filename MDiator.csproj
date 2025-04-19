@@ -24,8 +24,11 @@
 
   <ItemGroup>
     <Compile Remove="MDiator.Tests\**" />
+    <Compile Remove="sampleapp\**" />
     <EmbeddedResource Remove="MDiator.Tests\**" />
+    <EmbeddedResource Remove="sampleapp\**" />
     <None Remove="MDiator.Tests\**" />
+    <None Remove="sampleapp\**" />
   </ItemGroup>
 
 

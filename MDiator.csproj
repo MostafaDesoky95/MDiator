@@ -23,6 +23,13 @@
 
 
   <ItemGroup>
+    <Compile Remove="MDiator.Tests\**" />
+    <EmbeddedResource Remove="MDiator.Tests\**" />
+    <None Remove="MDiator.Tests\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <None Include="C:\Users\torpe\Downloads\MDiator_Logo_Optimized.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace MDiator.sampleapp
+namespace MDiator.SampleApp
 {
     public class CreateUserCommand : IMDiatorRequest<string>
     {

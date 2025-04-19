@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp", "..\SampleApp\S
 		{E491FD30-0F72-4EBC-9D82-55C8031F750D} = {E491FD30-0F72-4EBC-9D82-55C8031F750D}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.Tests", "MDiator.Tests\MDiator.Tests.csproj", "{BE2F3CBE-119F-44B3-884C-919C8937FD25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{F8C51235-129D-4902-B4B9-4ED30929514B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8C51235-129D-4902-B4B9-4ED30929514B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8C51235-129D-4902-B4B9-4ED30929514B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

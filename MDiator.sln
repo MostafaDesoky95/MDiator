@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator", "MDiator.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.Tests", "MDiator.Tests\MDiator.Tests.csproj", "{BE2F3CBE-119F-44B3-884C-919C8937FD25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.SampleApp", "..\SampleApp\MDiator.SampleApp.csproj", "{86F110D1-03ED-417B-AA12-3387F999CB69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.SampleApp", "MDiator.SampleApp\MDiator.SampleApp.csproj", "{86F110D1-03ED-417B-AA12-3387F999CB69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

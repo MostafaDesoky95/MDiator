@@ -24,11 +24,11 @@
 
   <ItemGroup>
     <Compile Remove="MDiator.Tests\**" />
-    <Compile Remove="sampleapp\**" />
+    <Compile Remove="MDiator.SamplApp\**" />
     <EmbeddedResource Remove="MDiator.Tests\**" />
-    <EmbeddedResource Remove="sampleapp\**" />
+    <EmbeddedResource Remove="MDiator.SamplApp\**" />
     <None Remove="MDiator.Tests\**" />
-    <None Remove="sampleapp\**" />
+    <None Remove="MDiator.SamplApp\**" />
   </ItemGroup>
 
 

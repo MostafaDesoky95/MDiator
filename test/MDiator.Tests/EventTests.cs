@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MDiator.Tests.MDiatorTests
+namespace MDiator.Tests
 {
     public class EventTests
     {

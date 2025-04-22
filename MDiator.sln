@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator", "MDiator.csproj", "{E491FD30-0F72-4EBC-9D82-55C8031F750D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{080CEFCD-B292-46D3-ACD9-ADF23D6E4126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.Tests", "MDiator.Tests\MDiator.Tests.csproj", "{BE2F3CBE-119F-44B3-884C-919C8937FD25}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{67B2F4DD-8749-4825-86A6-46B3A3546750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.SampleApp", "MDiator.SampleApp\MDiator.SampleApp.csproj", "{86F110D1-03ED-417B-AA12-3387F999CB69}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{1BAAC11A-4A8D-4283-A75E-78F35BD2A573}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator", "src\MDiator\MDiator.csproj", "{4BD087A6-3C5A-4BF0-AF07-AFC6891A5B31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.SampleApp", "samples\MDiator.SampleApp\MDiator.SampleApp.csproj", "{C7078975-1B4D-47E6-8574-F767C9C9C158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDiator.Tests", "test\MDiator.Tests\MDiator.Tests.csproj", "{5589552D-2DC7-49D8-8103-B6403DD5AF04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,20 +21,25 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E491FD30-0F72-4EBC-9D82-55C8031F750D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E491FD30-0F72-4EBC-9D82-55C8031F750D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E491FD30-0F72-4EBC-9D82-55C8031F750D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E491FD30-0F72-4EBC-9D82-55C8031F750D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE2F3CBE-119F-44B3-884C-919C8937FD25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86F110D1-03ED-417B-AA12-3387F999CB69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86F110D1-03ED-417B-AA12-3387F999CB69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86F110D1-03ED-417B-AA12-3387F999CB69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86F110D1-03ED-417B-AA12-3387F999CB69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BD087A6-3C5A-4BF0-AF07-AFC6891A5B31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BD087A6-3C5A-4BF0-AF07-AFC6891A5B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BD087A6-3C5A-4BF0-AF07-AFC6891A5B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BD087A6-3C5A-4BF0-AF07-AFC6891A5B31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7078975-1B4D-47E6-8574-F767C9C9C158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7078975-1B4D-47E6-8574-F767C9C9C158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7078975-1B4D-47E6-8574-F767C9C9C158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7078975-1B4D-47E6-8574-F767C9C9C158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5589552D-2DC7-49D8-8103-B6403DD5AF04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5589552D-2DC7-49D8-8103-B6403DD5AF04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5589552D-2DC7-49D8-8103-B6403DD5AF04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5589552D-2DC7-49D8-8103-B6403DD5AF04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4BD087A6-3C5A-4BF0-AF07-AFC6891A5B31} = {080CEFCD-B292-46D3-ACD9-ADF23D6E4126}
+		{C7078975-1B4D-47E6-8574-F767C9C9C158} = {1BAAC11A-4A8D-4283-A75E-78F35BD2A573}
+		{5589552D-2DC7-49D8-8103-B6403DD5AF04} = {67B2F4DD-8749-4825-86A6-46B3A3546750}
 	EndGlobalSection
 EndGlobal

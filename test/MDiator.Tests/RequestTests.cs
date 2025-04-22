@@ -2,7 +2,7 @@
 using MDiator.Tests.Requests;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MDiator.Tests.MDiatorTests
+namespace MDiator.Tests
 {
     public class RequestTests
     {

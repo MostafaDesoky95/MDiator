@@ -6,58 +6,44 @@ using System.Reflection;
 
 namespace MDiator
 {
-    public static class HandlerInvokerCache
+    public static class HandlerInvokerCache<TResponse>
     {
-        private static readonly ConcurrentDictionary<(Type RequestType, Type ResponseType), Func<IServiceProvider, object, Task<object>>> _cache = new();
+        private static readonly ConcurrentDictionary<Type, Func<IServiceProvider, IMDiatorRequest<TResponse>, Task<TResponse>>> _cache = new();
 
-        public static Task<object> Invoke(IServiceProvider provider, object request, Type responseType)
+        public static Func<IServiceProvider, IMDiatorRequest<TResponse>, Task<TResponse>> Get(Type requestType)
         {
-            var key = (request.GetType(), responseType);
-            var invoker = _cache.GetOrAdd(key, BuildInvoker);
-            return invoker(provider, request);
+            return _cache.GetOrAdd(requestType, BuildInvoker);
         }
 
-        private static Func<IServiceProvider, object, Task<object>> BuildInvoker((Type requestType, Type responseType) key)
+        private static Func<IServiceProvider, IMDiatorRequest<TResponse>, Task<TResponse>> BuildInvoker(Type requestType)
         {
-            var (requestType, responseType) = key;
-
-            var handlerType = typeof(IMDiatorHandler<,>).MakeGenericType(requestType, responseType);
-            var handleMethod = handlerType.GetMethod("Handle");
+            var handlerInterface = typeof(IMDiatorHandler<,>).MakeGenericType(requestType, typeof(TResponse));
+            var handleMethod = handlerInterface.GetMethod("Handle");
 
             var spParam = Expression.Parameter(typeof(IServiceProvider), "sp");
-            var requestParam = Expression.Parameter(typeof(object), "request");
+            var requestParam = Expression.Parameter(typeof(IMDiatorRequest<TResponse>), "request");
 
-            // handler = (IMDiatorHandler<,>)sp.GetRequiredService(...)
-            var getHandler = Expression.Call(
+            // sp.GetRequiredService<IMDiatorHandler<TRequest, TResponse>>()
+            var getHandlerCall = Expression.Call(
                 typeof(ServiceProviderServiceExtensions),
                 nameof(ServiceProviderServiceExtensions.GetRequiredService),
-                new[] { handlerType },
+                new[] { handlerInterface },
                 spParam
             );
 
-            // ((TRequest)request)
-            var castRequest = Expression.Convert(requestParam, requestType);
+            var call = Expression.Call(
+                Expression.Convert(getHandlerCall, handlerInterface),
+                handleMethod!,
+                Expression.Convert(requestParam, requestType)
+            );
 
-            // handler.Handle((TRequest)request)
-            var call = Expression.Call(Expression.Convert(getHandler, handlerType), handleMethod!, castRequest);
-
-            // wrap to Task<object>
-            var wrap = typeof(HandlerInvokerCache)
-                .GetMethod(nameof(WrapTask), BindingFlags.NonPublic | BindingFlags.Static)!
-                .MakeGenericMethod(responseType);
-
-            var wrappedCall = Expression.Call(wrap, call);
-
-            return Expression.Lambda<Func<IServiceProvider, object, Task<object>>>(
-                wrappedCall,
+            var lambda = Expression.Lambda<Func<IServiceProvider, IMDiatorRequest<TResponse>, Task<TResponse>>>(
+                call,
                 spParam,
                 requestParam
-            ).Compile();
-        }
+            );
 
-        private static async Task<object> WrapTask<T>(Task<T> task)
-        {
-            return await task.ConfigureAwait(false);
+            return lambda.Compile();
         }
     }
 }

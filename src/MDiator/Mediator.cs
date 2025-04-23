@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Concurrent;
 
 namespace MDiator
 {
@@ -14,8 +13,8 @@ namespace MDiator
 
         public async Task<TResponse> Send<TResponse>(IMDiatorRequest<TResponse> request)
         {
-            var result = await HandlerInvokerCache.Invoke(_provider, request, typeof(TResponse));
-            return (TResponse)result;
+            var invoker = HandlerInvokerCache<TResponse>.Get(request.GetType());
+            return await invoker(_provider, request);
         }
 
         public Task Publish<TEvent>(TEvent @event) where TEvent : IMDiatorEvent

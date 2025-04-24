@@ -20,6 +20,10 @@ public abstract class BaseBenchmarks
     protected ServiceProvider ServiceProvider => _serviceProvider;
 
     public abstract Task HandleEventAsync();
-
+    
+    public abstract Task HandleLongEventAsync();
+    
     public abstract Task HandleRequestAsync();
+    
+    public abstract Task HandleLongRequestAsync();
 }

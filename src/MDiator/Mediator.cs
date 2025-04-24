@@ -11,13 +11,13 @@ namespace MDiator
             _provider = provider;
         }
 
-        public async Task<TResponse> Send<TResponse>(IMDiatorRequest<TResponse> request)
+        public async Task<TResponse> SendAsync<TResponse>(IMDiatorRequest<TResponse> request)
         {
             var invoker = HandlerInvokerCache<TResponse>.Get(request.GetType());
             return await invoker(_provider, request);
         }
 
-        public Task Publish<TEvent>(TEvent @event) where TEvent : IMDiatorEvent
+        public Task PublishAsync<TEvent>(TEvent @event) where TEvent : IMDiatorEvent
         {
             return EventInvokerCache.Invoke(_provider, @event);
         }

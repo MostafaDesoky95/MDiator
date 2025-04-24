@@ -8,7 +8,8 @@ namespace MDiator
 {
     public interface IMediator
     {
-        Task<TResponse> Send<TResponse>(IMDiatorRequest<TResponse> request);
-        Task Publish<TEvent>(TEvent @event) where TEvent : IMDiatorEvent;
+        Task<TResponse> SendAsync<TResponse>(IMDiatorRequest<TResponse> request);
+
+        Task PublishAsync<TEvent>(TEvent @event) where TEvent : IMDiatorEvent;
     }
 }

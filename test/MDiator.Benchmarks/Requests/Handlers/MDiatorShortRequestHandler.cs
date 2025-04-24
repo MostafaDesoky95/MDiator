@@ -2,5 +2,5 @@
 
 public class MDiatorShortRequestHandler : IMDiatorHandler<ShortRequest, string>
 {
-    public Task<string> Handle(ShortRequest request) => Task.FromResult("Short Pong");
+    public Task<string> HandleAsync(ShortRequest request) => Task.FromResult("Short Pong");
 }

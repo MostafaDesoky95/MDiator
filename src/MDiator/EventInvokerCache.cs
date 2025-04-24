@@ -19,7 +19,7 @@ namespace MDiator
         private static Func<IServiceProvider, object, Task> BuildInvoker(Type eventType)
         {
             var handlerType = typeof(IMDiatorEventHandler<>).MakeGenericType(eventType);
-            var method = handlerType.GetMethod("Handle");
+            var method = handlerType.GetMethod("HandleAsync");
 
             var spParam = Expression.Parameter(typeof(IServiceProvider), "sp");
             var eventParam = Expression.Parameter(typeof(object), "event");

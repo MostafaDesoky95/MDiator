@@ -4,7 +4,7 @@ namespace MDiator.SampleApp.Handlers
 {
     public class NotifyTeamHandler : IMDiatorEventHandler<OrderCreatedEvent>
     {
-        public Task Handle(OrderCreatedEvent e)
+        public Task HandleAsync(OrderCreatedEvent e)
         {
             Console.WriteLine($"🔔 Team notified about Order #{e.OrderId}");
             return Task.CompletedTask;

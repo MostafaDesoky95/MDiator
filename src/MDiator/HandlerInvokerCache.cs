@@ -18,7 +18,7 @@ namespace MDiator
         private static Func<IServiceProvider, IMDiatorRequest<TResponse>, Task<TResponse>> BuildInvoker(Type requestType)
         {
             var handlerInterface = typeof(IMDiatorHandler<,>).MakeGenericType(requestType, typeof(TResponse));
-            var handleMethod = handlerInterface.GetMethod("Handle");
+            var handleMethod = handlerInterface.GetMethod("HandleAsync");
 
             var spParam = Expression.Parameter(typeof(IServiceProvider), "sp");
             var requestParam = Expression.Parameter(typeof(IMDiatorRequest<TResponse>), "request");

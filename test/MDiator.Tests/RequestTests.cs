@@ -16,7 +16,7 @@ namespace MDiator.Tests
             var provider = services.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            var result = await mediator.Send(new MyRequest());
+            var result = await mediator.SendAsync(new MyRequest());
 
             Assert.Equal("Handled: Test", result);
         }

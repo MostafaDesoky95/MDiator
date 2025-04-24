@@ -16,11 +16,11 @@ namespace MDiator.SampleApp
             var mediator = provider.GetRequiredService<IMediator>();
 
             // ✅ Send Command
-            var result = await mediator.Send(new CreateUserCommand { UserName = "Mostafa" });
+            var result = await mediator.SendAsync(new CreateUserCommand { UserName = "Mostafa" });
             Console.WriteLine(result);
 
             // ✅ Publish Event
-            await mediator.Publish(new OrderCreatedEvent { OrderId = 123 });
+            await mediator.PublishAsync(new OrderCreatedEvent { OrderId = 123 });
         }
     }
 }

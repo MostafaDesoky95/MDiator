@@ -7,34 +7,26 @@ namespace MDiator.Benchmarks;
 [MemoryDiagnoser]
 public class RequestBenchmark
 {
-    private MediatR.IMediator mediatR;
-    private MDiator.IMediator mDiator;
+    private static readonly MediatR.IMediator _mediatR;
+    private static readonly IMediator _mDiator;
 
-    [GlobalSetup]
-    public void Setup()
+    static RequestBenchmark()
     {
-        // MediatR setup
-        var services1 = new ServiceCollection();
-        services1.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(MediatRRequest).Assembly));
-        var serviceProvider1 = services1.BuildServiceProvider();
-        mediatR = serviceProvider1.GetRequiredService<MediatR.IMediator>();
+        var services = new ServiceCollection();
+        var assembly = typeof(RequestBenchmark).Assembly;
+        services
+            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly))
+            .AddMDiator(assembly);
 
-        // MDiator setup
-        var services2 = new ServiceCollection();
-        services2.AddMDiator(typeof(MediatRRequest).Assembly);
-        var serviceProvider2 = services2.BuildServiceProvider();
-        mDiator = serviceProvider2.GetRequiredService<MDiator.IMediator>();
+        var serviceProvider = services.BuildServiceProvider();
+
+        _mediatR = serviceProvider.GetRequiredService<MediatR.IMediator>();
+        _mDiator = serviceProvider.GetRequiredService<IMediator>();
     }
 
     [Benchmark]
-    public async Task<string> MDiator_Send()
-    {
-        return await mDiator.Send(new MediatRRequest());
-    }
+    public async Task<string> MDiator_Send() => await _mDiator.Send(new MDiatorRequest());
 
     [Benchmark]
-    public async Task<string> MediatR_Send()
-    {
-        return await mediatR.Send(new MediatRRequest());
-    }
+    public async Task<string> MediatR_Send() => await _mediatR.Send(new MediatRRequest());
 }

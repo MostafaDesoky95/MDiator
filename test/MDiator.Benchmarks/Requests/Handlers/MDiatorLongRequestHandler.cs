@@ -2,7 +2,7 @@
 
 public class MDiatorLongRequestHandler : IMDiatorHandler<LongRequest, string>
 {
-    public async Task<string> Handle(LongRequest request)
+    public async Task<string> HandleAsync(LongRequest request)
     {
         await Task.Delay(1000 * 15);
 

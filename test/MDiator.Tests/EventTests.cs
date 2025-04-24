@@ -25,10 +25,10 @@ namespace MDiator.Tests
             var provider = services.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
 
-            await mediator.Publish(new MyEvent());
+            await mediator.PublishAsync(new MyEvent());
 
-            mock1.Verify(m => m.Handle(It.IsAny<MyEvent>()), Times.Once);
-            mock2.Verify(m => m.Handle(It.IsAny<MyEvent>()), Times.Once);
+            mock1.Verify(m => m.HandleAsync(It.IsAny<MyEvent>()), Times.Once);
+            mock2.Verify(m => m.HandleAsync(It.IsAny<MyEvent>()), Times.Once);
         }
     }
 }

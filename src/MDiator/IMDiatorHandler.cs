@@ -9,6 +9,6 @@ namespace MDiator
     public interface IMDiatorHandler<TRequest, TResponse>
           where TRequest : IMDiatorRequest<TResponse>
     {
-        Task<TResponse> Handle(TRequest request);
+        Task<TResponse> HandleAsync(TRequest request);
     }
 }

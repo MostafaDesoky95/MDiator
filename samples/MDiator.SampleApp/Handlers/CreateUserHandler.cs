@@ -4,9 +4,11 @@ namespace MDiator.SampleApp.Handlers
 {
     public class CreateUserHandler : IMDiatorHandler<CreateUserCommand, string>
     {
-        public Task<string> Handle(CreateUserCommand request)
+        public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult($"✅ User '{request.UserName}' created.");
+            await Task.Delay(1000, cancellationToken); // Simulate some async work
+            
+            return await Task.FromResult($"✅ User '{request.UserName}' created.");
         }
     }
 }

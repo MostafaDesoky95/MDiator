@@ -17,6 +17,8 @@ namespace MDiator.Tests
             var mock1 = new Mock<IMDiatorEventHandler<MyEvent>>();
             var mock2 = new Mock<IMDiatorEventHandler<MyEvent>>();
 
+            var cancellationToken = new CancellationTokenSource();
+
             var services = new ServiceCollection();
             services.AddMDiator(typeof(MyEvent).Assembly);
             services.AddSingleton(mock1.Object);
@@ -27,8 +29,8 @@ namespace MDiator.Tests
 
             await mediator.Publish(new MyEvent());
 
-            mock1.Verify(m => m.Handle(It.IsAny<MyEvent>()), Times.Once);
-            mock2.Verify(m => m.Handle(It.IsAny<MyEvent>()), Times.Once);
+            mock1.Verify(m => m.Handle(It.IsAny<MyEvent>(), cancellationToken.Token), Times.Once);
+            mock2.Verify(m => m.Handle(It.IsAny<MyEvent>(), cancellationToken.Token), Times.Once);
         }
     }
 }

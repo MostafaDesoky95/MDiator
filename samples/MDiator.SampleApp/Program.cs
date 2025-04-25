@@ -16,7 +16,9 @@ namespace MDiator.SampleApp
             var mediator = provider.GetRequiredService<IMediator>();
 
             // ✅ Send Command
-            var result = await mediator.Send(new CreateUserCommand { UserName = "Mostafa" });
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(2000);
+            var result = await mediator.Send(new CreateUserCommand { UserName = "Mostafa" }, cts.Token);
             Console.WriteLine(result);
 
             // ✅ Publish Event

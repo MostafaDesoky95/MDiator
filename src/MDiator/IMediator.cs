@@ -8,7 +8,7 @@ namespace MDiator
 {
     public interface IMediator
     {
-        Task<TResponse> Send<TResponse>(IMDiatorRequest<TResponse> request);
-        Task Publish<TEvent>(TEvent @event) where TEvent : IMDiatorEvent;
+        Task<TResponse> Send<TResponse>(IMDiatorRequest<TResponse> request, CancellationToken cancellationToken = default);
+        Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IMDiatorEvent;
     }
 }

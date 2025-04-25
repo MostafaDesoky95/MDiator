@@ -7,22 +7,23 @@ namespace MDiator
 {
     public static class EventInvokerCache
     {
-        private static readonly ConcurrentDictionary<Type, Func<IServiceProvider, object, Task>> _cache = new();
+        private static readonly ConcurrentDictionary<Type, Func<IServiceProvider, object, CancellationToken, Task>> _cache = new();
 
-        public static Task Invoke(IServiceProvider provider, object @event)
+        public static Task Invoke(IServiceProvider provider, object @event, CancellationToken cancellationToken)
         {
             var eventType = @event.GetType();
             var invoker = _cache.GetOrAdd(eventType, BuildInvoker);
-            return invoker(provider, @event);
+            return invoker(provider, @event, cancellationToken);
         }
 
-        private static Func<IServiceProvider, object, Task> BuildInvoker(Type eventType)
+        private static Func<IServiceProvider, object, CancellationToken, Task> BuildInvoker(Type eventType)
         {
             var handlerType = typeof(IMDiatorEventHandler<>).MakeGenericType(eventType);
             var method = handlerType.GetMethod("Handle");
 
             var spParam = Expression.Parameter(typeof(IServiceProvider), "sp");
             var eventParam = Expression.Parameter(typeof(object), "event");
+            var cancellationTokenParam = Expression.Parameter(typeof(CancellationToken), "cancellationToken");
 
             var getHandlers = Expression.Call(
                 typeof(ServiceProviderServiceExtensions),
@@ -39,7 +40,7 @@ namespace MDiator
             var loop = ExpressionEx.ForEach(
                 handlersVar,
                 loopVar,
-                Expression.Call(loopVar, method!, Expression.Convert(eventParam, eventType))
+                Expression.Call(loopVar, method!, Expression.Convert(eventParam, eventType), cancellationTokenParam)
             );
 
             var block = Expression.Block(
@@ -49,10 +50,11 @@ namespace MDiator
                 Expression.Constant(Task.CompletedTask)
             );
 
-            return Expression.Lambda<Func<IServiceProvider, object, Task>>(
+            return Expression.Lambda<Func<IServiceProvider, object, CancellationToken, Task>>(
                 block,
                 spParam,
-                eventParam
+                eventParam,
+                cancellationTokenParam
             ).Compile();
         }
     }

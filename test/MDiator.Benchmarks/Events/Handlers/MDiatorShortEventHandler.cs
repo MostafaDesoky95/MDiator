@@ -2,5 +2,5 @@
 
 public class MDiatorShortEventHandler : IMDiatorEventHandler<ShortEvent>
 {
-    public async Task Handle(ShortEvent notification) => await Task.CompletedTask;
+    public async Task Handle(ShortEvent notification, CancellationToken cancellationToken) => await Task.CompletedTask;
 }

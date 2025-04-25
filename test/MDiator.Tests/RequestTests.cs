@@ -15,8 +15,8 @@ namespace MDiator.Tests
 
             var provider = services.BuildServiceProvider();
             var mediator = provider.GetRequiredService<IMediator>();
-
-            var result = await mediator.Send(new MyRequest());
+            var cancellationToken = new CancellationTokenSource().Token;
+            var result = await mediator.Send(new MyRequest(), cancellationToken);
 
             Assert.Equal("Handled: Test", result);
         }

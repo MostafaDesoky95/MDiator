@@ -1,5 +1,4 @@
-﻿using MDiator.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
@@ -37,11 +36,8 @@ namespace MDiator
 
             var assignHandlers = Expression.Assign(handlersVar, getHandlers);
 
-            var loop = ExpressionEx.ForEach(
-                handlersVar,
-                loopVar,
-                Expression.Call(loopVar, method!, Expression.Convert(eventParam, eventType), cancellationTokenParam)
-            );
+            var loop = handlersVar.ForEach(loopVar,
+                Expression.Call(loopVar, method!, Expression.Convert(eventParam, eventType)));
 
             var block = Expression.Block(
                 new[] { handlersVar },

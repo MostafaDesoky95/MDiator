@@ -18,7 +18,7 @@ namespace MDiator
         private static Func<IServiceProvider, object, CancellationToken, Task> BuildInvoker(Type eventType)
         {
             var handlerType = typeof(IMDiatorEventHandler<>).MakeGenericType(eventType);
-            var method = handlerType.GetMethod("Handle");
+            var handleMethod = handlerType.GetMethod("Handle");
 
             var spParam = Expression.Parameter(typeof(IServiceProvider), "sp");
             var eventParam = Expression.Parameter(typeof(object), "event");
@@ -32,19 +32,47 @@ namespace MDiator
             );
 
             var handlersVar = Expression.Variable(typeof(IEnumerable<>).MakeGenericType(handlerType), "handlers");
-            var loopVar = Expression.Variable(handlerType, "handler");
+            var handlerVar = Expression.Variable(handlerType, "handler");
+
+            var tasksVar = Expression.Variable(typeof(List<Task>), "tasks");
+
+      
+
+
+            var assignTasks = Expression.Assign(tasksVar, Expression.New(typeof(List<Task>)));
 
             var assignHandlers = Expression.Assign(handlersVar, getHandlers);
 
-            var loop = handlersVar.ForEach(loopVar,
-                Expression.Call(loopVar, method!, Expression.Convert(eventParam, eventType)));
 
-            var block = Expression.Block(
-                new[] { handlersVar },
-                assignHandlers,
-                loop,
-                Expression.Constant(Task.CompletedTask)
+            var callHandle = Expression.Call(
+                  handlerVar,
+                  handleMethod,
+                  Expression.Convert(eventParam, eventType),
+                  cancellationTokenParam
+              );
+
+            var addTaskToList = Expression.Call(
+                tasksVar,
+                typeof(List<Task>).GetMethod(nameof(List<Task>.Add))!,
+                callHandle
             );
+
+            var loop = handlersVar.ForEach(handlerVar, addTaskToList);
+
+            var whenAllCall = Expression.Call(
+                typeof(Task),
+                nameof(Task.WhenAll),
+                Type.EmptyTypes,
+                tasksVar
+            );
+            
+            var block = Expression.Block(
+                 new[] { handlersVar, tasksVar },
+                 assignHandlers,
+                 assignTasks,
+                 loop,
+                 whenAllCall
+             );
 
             return Expression.Lambda<Func<IServiceProvider, object, CancellationToken, Task>>(
                 block,

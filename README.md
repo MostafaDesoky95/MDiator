@@ -85,6 +85,7 @@ Here’s a comparison with MediatR using [BenchmarkDotNet](https://benchmarkdotn
 | MediatR_HandleRequestAsync      | 106.22 ns | 31.459 ns | 1.724 ns |  1.25 |    0.02 | 0.0343 |     288 B |        1.71 |
 
 > Event Handling ➔ 25% faster ⚡ and 82% less memory 📉
+
 > Request Handling ➔ 20% faster ⚡ and 42% less memory 📉
 
 

@@ -14,6 +14,7 @@ Inspired by MediatR, built for performance and clarity.
 - Auto-registration of handlers via assembly scanning
 - No reflection at runtime – uses compiled delegates
 - Minimal dependencies
+- CancelationToken support
 
 ---
 
@@ -75,10 +76,13 @@ await mediator.Publish(new OrderCreatedEvent { OrderId = 123 });
 MDiator is designed to be lean and fast — with no runtime reflection and minimal allocations.  
 Here’s a comparison with MediatR using [BenchmarkDotNet](https://benchmarkdotnet.org/):
 
-| Method       | Mean     | Error   | StdDev   | Gen0   | Gen1   | Allocated |
-|--------------|---------:|--------:|---------:|-------:|-------:|----------:|
-| **MDiator**  | 308.4 ns | 6.21 ns |  7.15 ns | 0.0563 |      - |     472 B |
-| MediatR      | 462.9 ns | 9.30 ns | 21.00 ns | 0.1779 | 0.0005 |    1488 B |
+| Method                          | Mean      | Error     | StdDev   | Ratio | RatioSD | Gen0   | Allocated | Alloc Ratio |
+|-------------------------------- |----------:|----------:|---------:|------:|--------:|-------:|----------:|------------:|
+| **MDiator_HandleEventAsync**    | 105.51 ns | 13.308 ns | 0.729 ns |  1.00 |    0.01 | 0.0067 |      56 B |        1.00 |
+| MediatR_HandleEventAsync        | 141.35 ns | 28.874 ns | 1.583 ns |  1.34 |    0.02 | 0.0372 |     312 B |        5.57 |
+|                                 |           |           |          |       |         |        |           |             |
+| **MDiator_HandleRequestAsync**  |  84.64 ns |  7.637 ns | 0.419 ns |  1.00 |    0.01 | 0.0200 |     168 B |        1.00 |
+| MediatR_HandleRequestAsync      | 106.22 ns | 31.459 ns | 1.724 ns |  1.25 |    0.02 | 0.0343 |     288 B |        1.71 |
 
 > ✅ MDiator is ~33% faster and uses ~3× less memory compared to MediatR.
 

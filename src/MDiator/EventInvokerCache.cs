@@ -17,47 +17,58 @@ namespace MDiator
 
         private static Func<IServiceProvider, object, CancellationToken, Task> BuildInvoker(Type eventType)
         {
-            var handlerType = typeof(IMDiatorEventHandler<>).MakeGenericType(eventType);
-            var handleMethod = handlerType.GetMethod("Handle");
-
             var spParam = Expression.Parameter(typeof(IServiceProvider), "sp");
             var eventParam = Expression.Parameter(typeof(object), "event");
             var cancellationTokenParam = Expression.Parameter(typeof(CancellationToken), "cancellationToken");
 
-            var getHandlers = Expression.Call(
+            var handlerInterfaceType = typeof(IMDiatorEventHandler<>).MakeGenericType(eventType);
+            var handleMethod = handlerInterfaceType.GetMethod("Handle")!;
+
+            var handlersEnumerable = Expression.Call(
                 typeof(ServiceProviderServiceExtensions),
                 nameof(ServiceProviderServiceExtensions.GetServices),
-                new[] { handlerType },
+                new[] { handlerInterfaceType },
                 spParam
             );
 
-            var handlersVar = Expression.Variable(typeof(IEnumerable<>).MakeGenericType(handlerType), "handlers");
-            var handlerVar = Expression.Variable(handlerType, "handler");
-
+            var handlersVar = Expression.Variable(typeof(IEnumerable<>).MakeGenericType(handlerInterfaceType), "handlers");
+            var handlersArrayVar = Expression.Variable(handlerInterfaceType.MakeArrayType(), "handlersArray");
+            var resultTaskVar = Expression.Variable(typeof(Task), "resultTask");
             var tasksVar = Expression.Variable(typeof(List<Task>), "tasks");
+            var handlerVar = Expression.Variable(handlerInterfaceType, "handler");
 
-      
+            var assignHandlers = Expression.Assign(handlersVar, handlersEnumerable);
 
+            var assignHandlersArray = Expression.Assign(
+                handlersArrayVar,
+                Expression.Call(typeof(Enumerable), nameof(Enumerable.ToArray), new[] { handlerInterfaceType }, handlersVar)
+            );
 
-            var assignTasks = Expression.Assign(tasksVar, Expression.New(typeof(List<Task>)));
+            var handlersLength = Expression.PropertyOrField(handlersArrayVar, "Length");
+            var zero = Expression.Constant(0);
+            var one = Expression.Constant(1);
 
-            var assignHandlers = Expression.Assign(handlersVar, getHandlers);
-
+            var callSingleHandle = Expression.Call(
+                Expression.ArrayIndex(handlersArrayVar, zero),
+                handleMethod,
+                Expression.Convert(eventParam, eventType),
+                cancellationTokenParam
+            );
 
             var callHandle = Expression.Call(
-                  handlerVar,
-                  handleMethod,
-                  Expression.Convert(eventParam, eventType),
-                  cancellationTokenParam
-              );
+                handlerVar,
+                handleMethod,
+                Expression.Convert(eventParam, eventType),
+                cancellationTokenParam
+            );
 
-            var addTaskToList = Expression.Call(
+            var addTask = Expression.Call(
                 tasksVar,
                 typeof(List<Task>).GetMethod(nameof(List<Task>.Add))!,
                 callHandle
             );
 
-            var loop = handlersVar.ForEach(handlerVar, addTaskToList);
+            var foreachHandlers = handlersArrayVar.ForEach(handlerVar, addTask);
 
             var whenAllCall = Expression.Call(
                 typeof(Task),
@@ -65,14 +76,39 @@ namespace MDiator
                 Type.EmptyTypes,
                 tasksVar
             );
-            
+
+            var assignCompletedTask = Expression.Assign(resultTaskVar, Expression.Constant(Task.CompletedTask, typeof(Task)));
+            var assignSingleHandle = Expression.Assign(resultTaskVar, callSingleHandle);
+            var assignWhenAll = Expression.Assign(resultTaskVar, whenAllCall);
+
+            var ifZeroHandlers = Expression.IfThen(
+                Expression.Equal(handlersLength, zero),
+                assignCompletedTask
+            );
+
+            var ifOneHandler = Expression.IfThen(
+                Expression.Equal(handlersLength, one),
+                assignSingleHandle
+            );
+
+            var elseManyHandlers = Expression.Block(
+                Expression.Assign(tasksVar, Expression.New(typeof(List<Task>))),
+                foreachHandlers,
+                assignWhenAll
+            );
+
             var block = Expression.Block(
-                 new[] { handlersVar, tasksVar },
-                 assignHandlers,
-                 assignTasks,
-                 loop,
-                 whenAllCall
-             );
+                new[] { handlersVar, handlersArrayVar, tasksVar, resultTaskVar },
+                assignHandlers,
+                assignHandlersArray,
+                ifZeroHandlers,
+                Expression.IfThenElse(
+                    Expression.Equal(handlersLength, one),
+                    ifOneHandler,
+                    elseManyHandlers
+                ),
+                resultTaskVar // <- Finally return the result
+            );
 
             return Expression.Lambda<Func<IServiceProvider, object, CancellationToken, Task>>(
                 block,
@@ -81,6 +117,6 @@ namespace MDiator
                 cancellationTokenParam
             ).Compile();
         }
-    }
 
+    }
 }
